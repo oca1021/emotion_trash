@@ -1,0 +1,10 @@
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('오늘 프로젝트를 무사히 마쳐서 정말 뿌듯하고 보람찬 하루였다.', '기쁨');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('오랜만에 친구를 만났는데 서먹해진 기분이 들어서 조금 씁쓸했다.', '슬픔');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('중요한 발표를 앞두고 심장이 터질 것처럼 떨리고 긴장된다.', '슬픔');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('아무 이유 없이 짜증이 나고 모든 일이 귀찮게 느껴지는 오후다.', '슬픔');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('길을 걷다 우연히 마주친 풍경이 너무 아름다워서 한참을 넋 놓고 바라봤다.', '기쁨');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('내가 잘하고 있는 걸까? 미래에 대한 막연한 두려움이 엄습한다.', '슬픔');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('드디어 가고 싶었던 맛집의 예약을 성공했다! 벌써부터 설렌다.', '기쁨');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('열심히 준비한 시험에서 실수한 것이 자꾸 떠올라 밤잠을 설치고 있다.', '슬픔');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('따뜻한 햇살 아래서 좋아하는 음악을 들으니 세상이 평화로워 보인다.', '평온');
+INSERT INTO EMOTIONS (CONTENT, SUBJECT) VALUES ('믿었던 사람에게 실망감을 느끼니 마음 한구석이 허전하고 아프다.', '허탈');
