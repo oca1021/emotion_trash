@@ -89,9 +89,7 @@ public class EmotionTrashContorller {
             return ResponseEntity.internalServerError().body("신규 등록에 실패했습니다.");
         }
     }
-
-    // RequestParam 이나 PathVariable 등 은 데이터 '하나'에 대한 정보라서 Parameter어노테이션으로 부가설명을 추가해줘야한다.
-    // RequestBody는 데이터 '뭉치' = Map 이기 떄문에 얘만 스웨거에 있는  @io.swagger.v3.oas.annotations.parameters RequestBody로 지정해서 부가설명을 추가해줘야한다.
+    
     @ApiResponse(responseCode = "200", description = "감정 버리기 상세 조회 성공")
     @ApiResponse(responseCode = "400", description = "조회된 아이디가 없음을 안내")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류")
@@ -132,5 +130,9 @@ public class EmotionTrashContorller {
             return ResponseEntity.internalServerError().body("상세 조회에 실패했습니다.");
         }
     }
+
+
+
+
 
 }
