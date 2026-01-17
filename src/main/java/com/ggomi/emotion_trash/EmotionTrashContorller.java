@@ -2,6 +2,8 @@ package com.ggomi.emotion_trash;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -9,11 +11,14 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -84,4 +89,48 @@ public class EmotionTrashContorller {
             return ResponseEntity.internalServerError().body("신규 등록에 실패했습니다.");
         }
     }
+
+    // RequestParam 이나 PathVariable 등 은 데이터 '하나'에 대한 정보라서 Parameter어노테이션으로 부가설명을 추가해줘야한다.
+    // RequestBody는 데이터 '뭉치' = Map 이기 떄문에 얘만 스웨거에 있는  @io.swagger.v3.oas.annotations.parameters RequestBody로 지정해서 부가설명을 추가해줘야한다.
+    @ApiResponse(responseCode = "200", description = "감정 버리기 상세 조회 성공")
+    @ApiResponse(responseCode = "400", description = "조회된 아이디가 없음을 안내")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    @Operation(summary = "감정 쓰레기통 상세조회", description = "감정 쓰레기통 상세조회")
+    @GetMapping("/emotions/{id}")
+    public ResponseEntity<?> findById (
+        @Parameter(description = "아이디 조건을 적으세요", example = "1") @PathVariable("id") long id
+    ) {
+        
+        logger.info("감정 정보 상세 조회 아이디::{}", id);
+
+        String sql = "SELECT * FROM EMOTIONS WHERE ID = ?";
+        try (Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+
+            // resultSet : 쿼리실행한 결과물을 담는다.
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            // 다음 결과물이 있으면
+            if(resultSet.next()) {
+                // Map타입의 변수 선언<key의타입(컬럼명), value의 타입(컬럼의 타입)>
+                Map<String, Object> result = new HashMap<>();
+                result.put("ID", resultSet.getLong("ID"));
+                result.put("CONTENT", resultSet.getString("CONTENT"));
+                result.put("SUBJECT", resultSet.getString("SUBJECT"));
+                result.put("USE_YN", resultSet.getString("USE_YN"));
+                result.put("REG_DTM", resultSet.getTimestamp("REG_DTM"));
+                result.put("MODI_DTM", resultSet.getTimestamp("MODI_DTM"));
+            
+                // 클라이언트한테 보낼 값을 ok안에 담는다.
+                return ResponseEntity.ok(result);
+            }
+            
+            return ResponseEntity.badRequest().body("해당 아이디를 가진 데이터가 없습니다.");
+        } catch (Exception e) {
+            logger.error("상세 정보 조회 실패::{}", e.getMessage());
+            return ResponseEntity.internalServerError().body("상세 조회에 실패했습니다.");
+        }
+    }
+
 }
