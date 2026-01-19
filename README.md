@@ -183,4 +183,9 @@ RequestBody는 데이터 '뭉치' = Map 이기 때문에 얘만 스웨거에 있
 
 * **블록 스코프(Block Scope):** * 자바는 중괄호 `{ }`를 기준으로 변수의 생명주기가 결정됩니다.
     * `try` 블록 내부에서 선언된 객체는 `finally` 블록에서 접근할 수 없습니다.
-    * 따라서 자원 해제(`close()`)를 위해 `finally`를 사용한다면, 반드시 **블록 외부**에서 변수를 미리 선언해야 합니다.  
+    * 따라서 자원 해제(`close()`)를 위해 `finally`를 사용한다면, 반드시 **블록 외부**에서 변수를 미리 선언해야 합니다.   
+
+### 4. `executeUpdate()`와 `executeQuery()`의 차이점
+`PreparedStatement` 객체를 통해 SQL을 실행할 때, 쿼리의 성격에 따라 사용하는 메서드가 다름을 실습했습니다.   
+* **`executeUpdate()`**: `INSERT`, `UPDATE`, `DELETE`문을 실행할 때 사용합니다. 결과값으로 영향을 받은 행(row)의 개수를 `int` 타입으로 반환합니다.
+* **`executeQuery()`**: `SELECT` 문을 실행할 때 사용합니다. 결과 데이터를 담고 있는 `ResultSet` 타입 객체를 반환합니다.
