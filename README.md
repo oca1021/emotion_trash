@@ -177,3 +177,10 @@ spring.h2.console.path=/h2-console
 ### 2. @RequestParam과 @io.swagger.v3.oas.annotations.parameters.RequestBody 차이점
 RequestParam 이나 PathVariable 등 은 데이터 '하나'에 대한 정보라서 Parameter어노테이션으로 부가설명을 추가해줘야한다.   
 RequestBody는 데이터 '뭉치' = Map 이기 때문에 얘만 스웨거에 있는 @io.swagger.v3.oas.annotations.parameters.RequestBody로 지정해서 부가설명을 추가해줘야한다.   
+
+### 3. 자바의 변수 스코프(Scope)에 대한 이해 
+`try-catch-finally` 문법을 사용할 때는 `try` 블록 위에 `Connection`과 `PreparedStatement` 객체를 생성했었는데,`try-with-resources` 문법을 사용할 때는 그럴 필요가 없었습니다. 왜 `try-catch-finally` 문법을 사용할때는 `try` 위에 객체들을 미리 선언했었는지 생각해보니, `try`안에서 생성한 변수들은 `finally`에서 접근하지 못한다는 사실을 알았습니다. 자바의 변수 스코프(Scope;범위)는 블록(`{}`) 단위로 구분됩니다. 이렇게 블록 단위로 구분되는 변수 스코프를 블록 스코프라고 부릅니다.
+
+* **블록 스코프(Block Scope):** * 자바는 중괄호 `{ }`를 기준으로 변수의 생명주기가 결정됩니다.
+    * `try` 블록 내부에서 선언된 객체는 `finally` 블록에서 접근할 수 없습니다.
+    * 따라서 자원 해제(`close()`)를 위해 `finally`를 사용한다면, 반드시 **블록 외부**에서 변수를 미리 선언해야 합니다.
