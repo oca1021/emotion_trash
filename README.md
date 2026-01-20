@@ -188,4 +188,10 @@ RequestBody는 데이터 '뭉치' = Map 이기 때문에 얘만 스웨거에 있
 ### 4. `executeUpdate()`와 `executeQuery()`의 차이점
 `PreparedStatement` 객체를 통해 SQL을 실행할 때, 쿼리의 성격에 따라 사용하는 메서드가 다름을 실습했습니다.   
 * **`executeUpdate()`**: `INSERT`, `UPDATE`, `DELETE`문을 실행할 때 사용합니다. 결과값으로 영향을 받은 행(row)의 개수를 `int` 타입으로 반환합니다.
-* **`executeQuery()`**: `SELECT` 문을 실행할 때 사용합니다. 결과 데이터를 담고 있는 `ResultSet` 타입 객체를 반환합니다.
+* **`executeQuery()`**: `SELECT` 문을 실행할 때 사용합니다. 결과 데이터를 담고 있는 `ResultSet` 타입 객체를 반환합니다.   
+
+### 6. ResultSet과 데이터 추출 원리 (next() 메서드)
+`SELECT` 결과로 받은 `ResultSet`은 일종의 데이터 테이블을 가리키는 커서(Cursor) 역할을 수행합니다.
+
+* **`next()` 메서드**: `ResultSet`은 처음 생성되었을 때 첫 번째 레코드 이전 위치를 가리키고 있습니다. `next()`를 호출해야만 실제 첫 번째 데이터로 커서가 이동하며, 다음 데이터가 존재하면 `true`, 없으면 `false`를 반환합니다. 이 원리를 이용해 `while(rs.next())` 문법으로 전체 데이터를 순회할 수 있습니다.
+* **유사한 동작 방식의 예시 (Iterator)**: 자바의 컬렉션 프레임워크에서 사용하는 **`Iterator.hasNext()`** 및 **`Iterator.next()`** 조합과 매우 유사하게 동작합니다.
