@@ -294,32 +294,6 @@ public class EmotionTrashContorller {
         }
     }
 
-    @ApiResponse(responseCode = "200", description = "감정 버리기 삭제 성공")
-    @ApiResponse(responseCode = "400", description = "밸리데이션 실패")
-    @ApiResponse(responseCode = "500", description = "내부 서버 오류")
-    @Operation(summary = "감정 쓰레기통 삭제", description = "감정 쓰레기통 삭제")
-    @DeleteMapping("/emotions/{id}")
-    public ResponseEntity<?> delete( @Parameter(description = "아이디 조건을 적으세요", example = "1") @PathVariable("id") long id
-    ) {
-        String sql = "UPDATE EMOTIONS SET USE_YN = 'N' WHERE ID = ? ";
-        try (Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setLong(1, id);
-
-            int deleteCount = preparedStatement.executeUpdate();
-            if (deleteCount == 0) {
-                return ResponseEntity.internalServerError().body("삭제에 실패했습니다.");
-            }
-            logger.debug("deleteCount::{}", deleteCount);
-
-            logger.info("감정 정보 삭제 완료::{}", deleteCount);
-            return ResponseEntity.ok("삭제에 성공했습니다.");
-        } catch (Exception e) {
-            logger.error("감정 정보 삭제 실패::{}", e.getMessage());
-            return ResponseEntity.internalServerError().body("삭제에 실패했습니다.");
-        }
-    }
-
 
     @ApiResponse(responseCode = "200", description = "감정 버리기 부분 수정 성공")
     @ApiResponse(responseCode = "400", description = "밸리데이션 실패")
@@ -329,7 +303,7 @@ public class EmotionTrashContorller {
     public ResponseEntity<?> patchById(
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "감정 정보 부분 수정",
-            required = true,
+            required = false,
             content = @Content(schema = @Schema(example = "{\"content\":\"다들 나만 미워해\", \"subject\":\"불만\",\"useYn\":\"N\"}"))
         )
         @RequestBody Map<String, String> params, @Parameter(description = "아이디 조건을 적으세요", example = "1") @PathVariable("id") long id
@@ -386,16 +360,13 @@ public class EmotionTrashContorller {
             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
             int parameterIndex = 1;
             if (content != null) {
-                preparedStatement.setString(parameterIndex, content);
-                parameterIndex += 1;
+                preparedStatement.setString(parameterIndex++, content);
             }
             if (useYn != null) {
-                preparedStatement.setString(parameterIndex, useYn);
-                parameterIndex += 1;
+                preparedStatement.setString(parameterIndex++, useYn);
             }
             if (subject != null) {
-                preparedStatement.setString(parameterIndex, subject);
-                parameterIndex += 1;
+                preparedStatement.setString(parameterIndex++, subject);
             }
             preparedStatement.setLong(parameterIndex, id);
 
@@ -410,6 +381,32 @@ public class EmotionTrashContorller {
         } catch (Exception e) {
             logger.error("감정 정보 부분 수정 실패::{}", e.getMessage());
             return ResponseEntity.internalServerError().body("부분 수정에 실패했습니다.");
+        }
+    }
+
+    @ApiResponse(responseCode = "200", description = "감정 버리기 삭제 성공")
+    @ApiResponse(responseCode = "400", description = "밸리데이션 실패")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    @Operation(summary = "감정 쓰레기통 삭제", description = "감정 쓰레기통 삭제")
+    @DeleteMapping("/emotions/{id}")
+    public ResponseEntity<?> delete( @Parameter(description = "아이디 조건을 적으세요", example = "1") @PathVariable("id") long id
+    ) {
+        String sql = "UPDATE EMOTIONS SET USE_YN = 'N' WHERE ID = ? ";
+        try (Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+
+            int deleteCount = preparedStatement.executeUpdate();
+            if (deleteCount == 0) {
+                return ResponseEntity.internalServerError().body("삭제에 실패했습니다.");
+            }
+            logger.debug("deleteCount::{}", deleteCount);
+
+            logger.info("감정 정보 삭제 완료::{}", deleteCount);
+            return ResponseEntity.ok("삭제에 성공했습니다.");
+        } catch (Exception e) {
+            logger.error("감정 정보 삭제 실패::{}", e.getMessage());
+            return ResponseEntity.internalServerError().body("삭제에 실패했습니다.");
         }
     }
 
